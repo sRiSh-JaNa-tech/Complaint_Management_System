@@ -107,6 +107,17 @@ const ComplaintSchema = new mongoose.Schema({
 
 ## 🔌 API Documentation
 
+### 🏥 Health Check Route
+* **Endpoint**: `GET /health`
+* **Description**: Returns the server status. Use this endpoint with external services (like UptimeRobot or Cron jobs) to ping the server every 10-14 minutes and prevent the Render free tier service from spinning down / going to sleep.
+* **Success Response (`200 OK`)**:
+  ```json
+  {
+    "status": "UP",
+    "timestamp": "2026-05-19T10:52:11.000Z"
+  }
+  ```
+
 ### 🔑 Authentication Routes
 All Auth endpoints are prefix-mounted at `/api/auth`.
 
