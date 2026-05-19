@@ -18,6 +18,25 @@ export default function ComplaintRegistration() {
   const [success, setSuccess] = useState(false);
   const [error, setError]     = useState('');
 
+  // Auto-fill logged-in user details to save time and prevent manual entry errors
+  React.useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser && storedUser !== 'undefined') {
+        const user = JSON.parse(storedUser);
+        if (user && (user.name || user.email)) {
+          setForm((prev) => ({
+            ...prev,
+            name: user.name || '',
+            email: user.email || '',
+          }));
+        }
+      }
+    } catch (err) {
+      console.error('Failed to pre-populate user details:', err);
+    }
+  }, []);
+
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {

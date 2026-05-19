@@ -5,7 +5,17 @@ import { FilePlus, ClipboardList, LogOut } from 'lucide-react';
 
 export default function Layout({ children }) {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  
+  // Safely parse the user object from localStorage
+  let user = {};
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && storedUser !== 'undefined') {
+      user = JSON.parse(storedUser) || {};
+    }
+  } catch (err) {
+    console.error('Failed to parse user from localStorage:', err);
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -13,8 +23,15 @@ export default function Layout({ children }) {
     navigate('/login');
   };
 
-  const initials = user.name
-    ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+  // Safely generate initials
+  const initials = user && typeof user.name === 'string' && user.name.trim()
+    ? user.name
+        .trim()
+        .split(/\s+/)
+        .map((n) => n ? n[0] : '')
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
     : 'U';
 
   return (
