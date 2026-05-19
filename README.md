@@ -319,3 +319,38 @@ Our system's core system prompts are strictly configured to deliver highly predi
    npm run dev
    ```
 4. Open your browser and navigate to `http://localhost:5173`. Any API calls made to `/api/*` will be proxy-routed to the server at `http://localhost:5000` automatically.
+
+---
+
+## 🚀 Render Deployment Guide
+
+### Deploying the Frontend (Vite) as a Static Site
+When deploying a Vite single-page application (SPA) on Render, configure the following settings:
+
+1. **Service Type**: Select **Static Site**.
+2. **Build & Deploy Settings**:
+   - **Repository URL**: Connect your repository.
+   - **Root Directory**: `AI_BGM` *(Crucial since the frontend code is in a subfolder)*.
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `dist`
+3. **SPA Redirect Rules**:
+   Since the React frontend uses client-side routing (`react-router-dom`), you must configure a redirect rule so that direct links (like `/login` or `/complaints`) do not return 404s when refreshed:
+   - In your Render dashboard, navigate to the **Redirects/Rewrites** tab for the static site service.
+   - Add a rule:
+     - **Source**: `/*`
+     - **Destination**: `/index.html`
+     - **Action**: `Rewrite`
+
+### Deploying the Backend (Express API) as a Web Service
+1. **Service Type**: Select **Web Service**.
+2. **Build & Deploy Settings**:
+   - **Root Directory**: `backend` *(Since backend code is in the `backend` subfolder)*.
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+3. **Environment Variables**:
+   Under the **Environment** tab, add your production environment variables:
+   - `PORT`: `5000` or whatever port you choose.
+   - `MONGO_URL`: Your production MongoDB connection string.
+   - `JWT_SECRET`: A secure random secret key.
+   - `GEMINI_API_KEY`: Your valid Gemini API Key.
+

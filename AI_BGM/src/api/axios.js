@@ -2,8 +2,10 @@
 // Centralised Axios instance — all API calls use this so the base URL is set once.
 import axios from 'axios';
 
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
 const API = axios.create({
-  baseURL: '/api',
+  baseURL: isLocal ? '/api' : 'https://complaint-management-service.onrender.com/api',
 });
 
 // Automatically attach JWT token to every request if present in localStorage
